@@ -475,6 +475,8 @@
     "startupSection": "Sección de inicio",
     "showExploreTab": "Mostrar pestaña Explorar",
     "showExploreTabDescription": "Muestra la pestaña Explorar con contenido de Plex Discover y servicios de seguimiento conectados",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Canales favoritos por defecto",
     "liveTvDefaultFavoritesDescription": "Mostrar solo canales favoritos al abrir TV en vivo",
     "general": "General",

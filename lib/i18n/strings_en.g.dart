@@ -1372,6 +1372,12 @@ class Translations$settings$en {
 	/// en: 'Display the Explore tab with content from Plex Discover and connected trackers'
 	String get showExploreTabDescription => 'Display the Explore tab with content from Plex Discover and connected trackers';
 
+	/// en: 'Minimalist'
+	String get minimalist => 'Minimalist';
+
+	/// en: 'Hide Downloads from the TV sidebar'
+	String get minimalistDescription => 'Hide Downloads from the TV sidebar';
+
 	/// en: 'Default to Favorite Channels'
 	String get liveTvDefaultFavorites => 'Default to Favorite Channels';
 
@@ -8475,6 +8481,8 @@ extension on Translations {
 			'settings.startupSection' => 'Startup Section',
 			'settings.showExploreTab' => 'Show Explore Tab',
 			'settings.showExploreTabDescription' => 'Display the Explore tab with content from Plex Discover and connected trackers',
+			'settings.minimalist' => 'Minimalist',
+			'settings.minimalistDescription' => 'Hide Downloads from the TV sidebar',
 			'settings.liveTvDefaultFavorites' => 'Default to Favorite Channels',
 			'settings.liveTvDefaultFavoritesDescription' => 'Show only favorite channels when opening Live TV',
 			'settings.general' => 'General',

@@ -475,6 +475,8 @@
     "startupSection": "Başlangıç Bölümü",
     "showExploreTab": "Keşfet sekmesini göster",
     "showExploreTabDescription": "Plex Keşfet ve bağlı takip hizmetlerinden gelen içeriklerle Keşfet sekmesini göster",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Canlı TV'de Favorileri Varsayılan Yap",
     "liveTvDefaultFavoritesDescription": "Canlı TV açıldığında yalnızca favori kanalları göster",
     "general": "Genel",

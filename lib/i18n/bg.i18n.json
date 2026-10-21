@@ -475,6 +475,8 @@
     "startupSection": "Начален раздел",
     "showExploreTab": "Показване на раздела „Открий“",
     "showExploreTabDescription": "Показва раздела „Открий“ със съдържание от Plex Discover и свързаните тракери",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "По подразбиране към любими канали",
     "liveTvDefaultFavoritesDescription": "Показвай само любими канали при отваряне на телевизия на живо",
     "general": "Общи",

@@ -475,6 +475,8 @@
     "startupSection": "Başlanğıc bölməsi",
     "showExploreTab": "Kəşf et nişanını göstər",
     "showExploreTabDescription": "Plex Discover və qoşulmuş izləmə xidmətlərindəki məzmunla Kəşf et nişanını göstər",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Canlı TV-də sevimli kanalları defolt et",
     "liveTvDefaultFavoritesDescription": "Canlı TV açıldıqda yalnız sevimli kanalları göstər",
     "general": "Ümumi",

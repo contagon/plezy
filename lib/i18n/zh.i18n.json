@@ -475,6 +475,8 @@
     "startupSection": "启动页面",
     "showExploreTab": "显示“探索”标签页",
     "showExploreTabDescription": "显示“探索”标签页，其中包含来自 Plex Discover 和已连接追踪服务的内容",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "默认显示收藏频道",
     "liveTvDefaultFavoritesDescription": "打开直播电视时仅显示收藏频道",
     "general": "通用",

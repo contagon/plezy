@@ -475,6 +475,8 @@
     "startupSection": "Startseksjon",
     "showExploreTab": "Vis Oppdag-fanen",
     "showExploreTabDescription": "Vis Oppdag-fanen med innhold fra Plex Discover og tilkoblede sporingstjenester",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Vis favorittkanaler som standard",
     "liveTvDefaultFavoritesDescription": "Vis bare favorittkanaler når du åpner Direkte-TV",
     "general": "Generelt",

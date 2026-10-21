@@ -498,7 +498,9 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
   /// focus-expanded — displaces content instead and stays transparent on TV.
   bool get _isFloatingPanel => _interactionExpanded && !widget.alwaysExpanded;
 
-  bool get _showDownloads => !PlatformDetector.isAppleTV();
+  bool get _showDownloads =>
+      !PlatformDetector.isAppleTV() &&
+      !(PlatformDetector.isTV() && SettingsService.instance.read(SettingsService.minimalist));
 
   /// macOS has the system green button; mobile/TV have no OS fullscreen toggle.
   bool get _showFullscreenToggle => Platform.isWindows || Platform.isLinux;
@@ -891,7 +893,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
     final musicService = context.watch<MusicPlaybackService?>();
     final nowPlayingTrack = widget.isOfflineMode || !PlatformDetector.isTV() ? null : musicService?.currentTrack;
 
-    // Listen to fullscreen + the groupLibrariesByServer / showExploreTab
+    // Listen to fullscreen + the navigation appearance
     // settings so the rail rebuilds when they are toggled in Appearance, and to
     // librariesSectionExpanded so the Libraries header toggle repaints.
     return ListenableBuilder(
@@ -899,6 +901,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
         FullscreenStateManager(),
         SettingsService.instance.listenable(SettingsService.groupLibrariesByServer),
         SettingsService.instance.listenable(SettingsService.showExploreTab),
+        SettingsService.instance.listenable(SettingsService.minimalist),
         SettingsService.instance.listenable(SettingsService.librariesSectionExpanded),
       ]),
       builder: (context, _) {
@@ -1076,8 +1079,7 @@ class SideNavigationRailState extends State<SideNavigationRail> with MountedSetS
                                       ),
                                       const SizedBox(height: _itemGap),
                                     ],
-                                    // Downloads (hidden on Apple TV — no user
-                                    // file storage)
+                                    // Apple TV has no user file storage; minimalist TV mode hides this too.
                                     if (_showDownloads) ...[
                                       _buildNavItem(
                                         icon: Symbols.download_rounded,

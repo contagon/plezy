@@ -135,6 +135,13 @@ class AppearanceSettingsScreen extends StatelessWidget {
         SettingsGroup(
           title: t.settings.navigation,
           children: [
+            if (PlatformDetector.isTV() && !PlatformDetector.isAppleTV())
+              SettingSwitchTile(
+                pref: SettingsService.minimalist,
+                icon: Symbols.visibility_off_rounded,
+                title: t.settings.minimalist,
+                subtitle: t.settings.minimalistDescription,
+              ),
             if (hasExplore)
               SettingSwitchTile(
                 pref: SettingsService.showExploreTab,

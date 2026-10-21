@@ -475,6 +475,8 @@
     "startupSection": "Sekcja startowa",
     "showExploreTab": "Pokaż kartę Odkryj",
     "showExploreTabDescription": "Wyświetlaj kartę Odkryj z treściami z Plex Discover i połączonych serwisów śledzących",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Domyślnie ulubione kanały",
     "liveTvDefaultFavoritesDescription": "Pokaż tylko ulubione kanały po otwarciu telewizji na żywo",
     "general": "Ogólne",

@@ -9,6 +9,7 @@ import 'package:plezy/services/settings_service.dart' as settings show ThemeMode
 import 'package:plezy/services/supporter/supporter_mode.dart';
 import 'package:plezy/services/supporter/supporter_service.dart';
 import 'package:plezy/theme/mono_theme.dart';
+import 'package:plezy/utils/platform_detector.dart';
 import 'package:provider/provider.dart';
 
 import '../../test_helpers/prefs.dart';
@@ -19,6 +20,32 @@ void main() {
     SettingsService.resetForTesting();
     await SettingsService.getInstance();
     LocaleSettings.setLocaleSync(AppLocale.en);
+  });
+
+  testWidgets('TV minimalist toggle persists its value', (tester) async {
+    final tvDetection = await TvDetectionService.getInstance();
+    tvDetection.setForceTv(true);
+    addTearDown(() => TvDetectionService.setForceTVSync(false));
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1000, 3000);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    final supporter = SupporterService.forTesting(availability: SupporterAvailability.hidden);
+    addTearDown(supporter.dispose);
+    final theme = ThemeProvider(supporter: supporter);
+    addTearDown(theme.dispose);
+    await tester.pumpWidget(
+      ChangeNotifierProvider<ThemeProvider>.value(
+        value: theme,
+        child: MaterialApp(theme: monoTheme(MonoPalette.dark), home: const AppearanceSettingsScreen()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final toggle = find.text('Minimalist');
+    await tester.scrollUntilVisible(toggle, 500, scrollable: find.byType(Scrollable).first);
+    await tester.tap(toggle);
+    await tester.pumpAndSettle();
+    expect(SettingsService.instance.read(SettingsService.minimalist), isTrue);
   });
 
   testWidgets('appearance screen renders every reorganized group', (tester) async {
@@ -39,6 +66,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(find.text('Minimalist'), findsNothing);
     for (final group in [
       t.settings.display,
       t.settings.libraryAndCards,

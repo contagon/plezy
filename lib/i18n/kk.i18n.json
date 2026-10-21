@@ -475,6 +475,8 @@
     "startupSection": "Бастапқы бөлім",
     "showExploreTab": "«Шолу» қойындысын көрсету",
     "showExploreTabDescription": "Plex шолуынан және қосылған трекерлерден алынған контенті бар «Шолу» қойындысын көрсету",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Тікелей TV-де таңдаулы арналарды әдепкі ету",
     "liveTvDefaultFavoritesDescription": "Тікелей TV ашылғанда тек таңдаулы арналарды көрсету",
     "general": "Жалпы",

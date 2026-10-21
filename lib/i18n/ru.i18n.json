@@ -475,6 +475,8 @@
     "startupSection": "Начальный раздел",
     "showExploreTab": "Показывать вкладку «Обзор»",
     "showExploreTabDescription": "Показывать вкладку «Обзор» с контентом из Plex Discover и подключённых трекеров",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Избранные каналы по умолчанию",
     "liveTvDefaultFavoritesDescription": "Показывать только избранные каналы при открытии ТВ",
     "general": "Основные",

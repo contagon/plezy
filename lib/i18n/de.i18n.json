@@ -475,6 +475,8 @@
     "startupSection": "Startbereich",
     "showExploreTab": "Tab „Entdecken“ anzeigen",
     "showExploreTabDescription": "Zeigt den Tab „Entdecken“ mit Inhalten aus Plex Discover und verbundenen Trackern an",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Standardmäßig Favoritenkanäle",
     "liveTvDefaultFavoritesDescription": "Beim Öffnen von Live TV nur Favoritenkanäle anzeigen",
     "general": "Allgemein",

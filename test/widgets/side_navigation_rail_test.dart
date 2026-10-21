@@ -174,6 +174,41 @@ void main() {
     LocaleSettings.setLocaleSync(AppLocale.en);
   });
 
+  testWidgets('minimalist TV rail hides Downloads live and skips it with the D-pad', (tester) async {
+    final tvDetection = await TvDetectionService.getInstance();
+    tvDetection.setForceTv(true);
+    addTearDown(() => TvDetectionService.setForceTVSync(false));
+    final sideNavKey = GlobalKey<SideNavigationRailState>();
+    await _pumpBasicRail(tester, sideNavKey: sideNavKey, isSidebarFocused: true, alwaysExpanded: true);
+
+    expect(find.widgetWithText(NavigationRailItem, 'Downloads'), findsOneWidget);
+    await SettingsService.instance.write(SettingsService.minimalist, true);
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(NavigationRailItem, 'Downloads'), findsNothing);
+
+    sideNavKey.currentState!.focusActiveItem();
+    await tester.pumpAndSettle();
+    // Home -> Libraries -> Search -> Settings, without a hidden focus stop.
+    for (var i = 0; i < 3; i++) {
+      await _press(tester, LogicalKeyboardKey.arrowDown);
+    }
+    expect(
+      tester.widget<NavigationRailItem>(find.widgetWithText(NavigationRailItem, 'Settings')).focusNode.hasFocus,
+      isTrue,
+    );
+
+    await SettingsService.instance.write(SettingsService.minimalist, false);
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(NavigationRailItem, 'Downloads'), findsOneWidget);
+  });
+
+  testWidgets('minimalist preference leaves non-TV Downloads visible', (tester) async {
+    await SettingsService.getInstance();
+    await SettingsService.instance.write(SettingsService.minimalist, true);
+    await _pumpBasicRail(tester, alwaysExpanded: true);
+    expect(find.widgetWithText(NavigationRailItem, 'Downloads'), findsOneWidget);
+  });
+
   testWidgets('closed TV rail is slim and keeps primary icons centered', (tester) async {
     TvDetectionService.debugSetAppleTVOverride(true);
     addTearDown(() => TvDetectionService.debugSetAppleTVOverride(null));

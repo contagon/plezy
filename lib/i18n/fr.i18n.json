@@ -475,6 +475,8 @@
     "startupSection": "Section de démarrage",
     "showExploreTab": "Afficher l’onglet Explorer",
     "showExploreTabDescription": "Afficher l’onglet Explorer avec le contenu de Plex Discover et des services de suivi connectés",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Chaînes favorites par défaut",
     "liveTvDefaultFavoritesDescription": "Afficher uniquement les chaînes favorites à l'ouverture de la TV en direct",
     "general": "Général",

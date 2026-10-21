@@ -475,6 +475,8 @@
     "startupSection": "Indítási oldal",
     "showExploreTab": "Felfedezés lap megjelenítése",
     "showExploreTabDescription": "A Plex Discover és a csatlakoztatott követők tartalmait megjelenítő Felfedezés lap megjelenítése",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Kedvenc csatornák alapértelmezés szerint",
     "liveTvDefaultFavoritesDescription": "Csak a kedvenc csatornák megjelenítése az Élő TV megnyitásakor",
     "general": "Általános",

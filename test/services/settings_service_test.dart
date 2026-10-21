@@ -23,6 +23,16 @@ void main() {
     TvDetectionService.debugSetAutomotiveOverride(null);
   });
 
+  test('minimalist is opt-in and persists across settings reloads', () async {
+    final settings = await SettingsService.getInstance();
+    expect(settings.read(SettingsService.minimalist), isFalse);
+    await settings.write(SettingsService.minimalist, true);
+    SettingsService.resetForTesting();
+    final reloaded = await SettingsService.getInstance();
+    expect(reloaded.read(SettingsService.minimalist), isTrue);
+    expect(SettingsService.portablePrefs, contains(SettingsService.minimalist));
+  });
+
   group('SettingsService.parseMpvConfigText', () {
     test('parses plain key=value lines', () {
       final out = SettingsService.parseMpvConfigText('hwdec=auto\nvolume=100');

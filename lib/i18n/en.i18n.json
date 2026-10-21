@@ -475,6 +475,8 @@
     "startupSection": "Startup Section",
     "showExploreTab": "Show Explore Tab",
     "showExploreTabDescription": "Display the Explore tab with content from Plex Discover and connected trackers",
+    "minimalist": "Minimalist",
+    "minimalistDescription": "Hide Downloads from the TV sidebar",
     "liveTvDefaultFavorites": "Default to Favorite Channels",
     "liveTvDefaultFavoritesDescription": "Show only favorite channels when opening Live TV",
     "general": "General",

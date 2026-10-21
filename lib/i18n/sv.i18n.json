@@ -475,6 +475,8 @@
     "startupSection": "Startsida",
     "showExploreTab": "Visa fliken Utforska",
     "showExploreTabDescription": "Visa fliken Utforska med innehåll från Plex Discover och anslutna spårningstjänster",
+    "minimalist": "",
+    "minimalistDescription": "",
     "liveTvDefaultFavorites": "Öppna med favoriter",
     "liveTvDefaultFavoritesDescription": "Visa endast favoritkanaler när Live-TV öppnas",
     "general": "Allmänt",
