@@ -3,13 +3,15 @@ package com.edde746.plezy.libass.media.widget
 import android.app.ActivityManager
 import android.content.Context
 import android.graphics.PixelFormat
+import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.widget.FrameLayout
 import androidx.media3.common.util.UnstableApi
 import com.edde746.plezy.libass.media.AssHandler
 
 /**
- * Subtitle overlay rendered through a dedicated [SurfaceView] layer.
+ * Subtitle overlay rendered through a dedicated surface or a capture-compatible texture.
  *
  * Uses a SurfaceFlinger layer directly, which lets the atlas-based pipeline
  * vsync-align its swap with the corresponding video frame via
@@ -18,17 +20,28 @@ import com.edde746.plezy.libass.media.AssHandler
 @UnstableApi
 class AssSubtitleSurfaceView(
   context: Context,
-  private val assHandler: AssHandler
-) : SurfaceView(context),
+  private val assHandler: AssHandler,
+  useTextureView: Boolean = false
+) : FrameLayout(context),
   SurfaceHolder.Callback {
 
   private var pipeline: AssAtlasPipeline? = null
   private var preSwapProbe: ((Long) -> Unit)? = null
+  val surfaceView: SurfaceView? = if (useTextureView) null else SurfaceView(context)
 
   init {
-    setZOrderMediaOverlay(true)
-    holder.setFormat(PixelFormat.TRANSLUCENT)
-    holder.addCallback(this)
+    val renderView = surfaceView?.apply {
+      setZOrderMediaOverlay(true)
+      holder.setFormat(PixelFormat.TRANSLUCENT)
+      holder.addCallback(this@AssSubtitleSurfaceView)
+    } ?: TextureSurfaceView(
+      context,
+      opaque = false,
+      onCreated = { surface, width, height -> createPipeline(surface, width, height) },
+      onResized = { width, height -> resizePipeline(width, height) },
+      onDestroyed = { releasePipeline() }
+    )
+    addView(renderView, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
   }
 
   /**
@@ -154,12 +167,16 @@ class AssSubtitleSurfaceView(
 
   override fun surfaceCreated(holder: SurfaceHolder) {
     val rect = holder.surfaceFrame
-    assHandler.setOverlaySurfaceSize(rect.width(), rect.height())
+    createPipeline(holder.surface, rect.width(), rect.height())
+  }
+
+  private fun createPipeline(surface: Surface, width: Int, height: Int) {
+    assHandler.setOverlaySurfaceSize(width, height)
     val lowRam = (context.getSystemService(Context.ACTIVITY_SERVICE) as? ActivityManager)
       ?.isLowRamDevice ?: false
     // Display refresh drives the present-error histogram's vsync-relative buckets.
     val refreshRate = display?.refreshRate?.takeIf { it >= 1f } ?: 60f
-    pipeline = AssAtlasPipeline(holder.surface, rect.width(), rect.height(), assHandler, lowRam, refreshRate)
+    pipeline = AssAtlasPipeline(surface, width, height, assHandler, lowRam, refreshRate)
       .also {
         it.preSwapProbe = preSwapProbe
         it.start()
@@ -167,11 +184,19 @@ class AssSubtitleSurfaceView(
   }
 
   override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+    resizePipeline(width, height)
+  }
+
+  private fun resizePipeline(width: Int, height: Int) {
     assHandler.setOverlaySurfaceSize(width, height)
     pipeline?.onSurfaceSizeChanged(width, height)
   }
 
   override fun surfaceDestroyed(holder: SurfaceHolder) {
+    releasePipeline()
+  }
+
+  private fun releasePipeline() {
     pipeline?.releaseAndWait()
     pipeline = null
   }

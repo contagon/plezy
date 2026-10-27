@@ -432,6 +432,8 @@
     "downmixCenterBoostShort": "dB",
     "audioDownmixNormalize": "Normalize Volume on Downmix",
     "audioDownmixNormalizeDescription": "Lower the mix to prevent clipping. Turn off to keep the original volume (may distort loud scenes).",
+    "screenCaptureCompatibility": "Ambilight / Screen Capture Compatibility",
+    "screenCaptureCompatibilityDescription": "Use ExoPlayer texture rendering for screen grabbers such as Hyperion. Not supported by mpv. Disables tunneled playback and may affect HDR, resolution, and performance. Applies to the next player session.",
     "dvConversionMode": "Dolby Vision Conversion",
     "dvConversionModeDescription": "Choose how Dolby Vision Profile 7 files are handled.",
     "dvConversionAuto": "Auto",

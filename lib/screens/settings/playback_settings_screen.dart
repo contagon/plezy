@@ -73,6 +73,7 @@ class PlaybackSettingsScreen extends StatelessWidget {
                 if (PlatformDetector.supportsExternalPlayers()) _externalPlayerTile(),
                 if (!exoActive) _mpvConfigTile(),
                 _hardwareDecodingTile(),
+                if (exoActive) _screenCaptureCompatibilityTile(),
                 if (exoActive) _playbackBufferTile(),
                 if (exoActive) _tunneledPlaybackTile(),
                 if (PlatformDetector.supportsPictureInPicture()) _autoPipTile(),
@@ -598,6 +599,13 @@ class PlaybackSettingsScreen extends StatelessWidget {
     icon: Symbols.tv_options_input_settings_rounded,
     title: t.settings.tunneledPlayback,
     subtitle: t.settings.tunneledPlaybackDescription,
+  );
+
+  Widget _screenCaptureCompatibilityTile() => SettingSwitchTile(
+    pref: SettingsService.screenCaptureCompatibility,
+    icon: Symbols.tv_options_input_settings_rounded,
+    title: t.settings.screenCaptureCompatibility,
+    subtitle: t.settings.screenCaptureCompatibilityDescription,
   );
 
   Widget _disableDolbyVisionTile() => SettingSwitchTile(

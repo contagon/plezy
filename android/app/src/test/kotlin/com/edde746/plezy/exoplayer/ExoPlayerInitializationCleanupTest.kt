@@ -21,6 +21,26 @@ import org.robolectric.annotation.Config
 class ExoPlayerInitializationCleanupTest {
 
   @Test
+  fun captureCompatibilityUsesTexturesAndBlocksTunnelingWithoutChangingUserPreference() {
+    val activity = Robolectric.buildActivity(Activity::class.java).setup().get()
+    activity.setContentView(FrameLayout(activity))
+    val core = ExoPlayerCore(activity)
+    try {
+      assertTrue(core.initialize(tunnelingEnabled = true, screenCaptureCompatibility = true))
+      val video = core.getPrivateField("videoAspectContainer") as FrameLayout
+      assertTrue(video.getChildAt(0) is android.view.TextureView)
+      val subtitles = core.getPrivateField("assSubtitleView") as FrameLayout
+      assertTrue(subtitles.getChildAt(0) is android.view.TextureView)
+      assertEquals(true, core.getPrivateField("tunnelingUserEnabled"))
+      val calculate = core.javaClass.getDeclaredMethod("calculateTunnelingEnabled").apply { isAccessible = true }
+      assertEquals(false, calculate.invoke(core))
+    } finally {
+      core.dispose()
+      shadowOf(Looper.getMainLooper()).idle()
+    }
+  }
+
+  @Test
   fun disposeRemovesPartiallyAttachedViewAndLayoutListener() {
     val activity = Robolectric.buildActivity(Activity::class.java).setup().get()
     activity.setContentView(FrameLayout(activity))

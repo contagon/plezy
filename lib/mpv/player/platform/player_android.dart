@@ -115,6 +115,7 @@ class PlayerAndroid extends PlayerBase {
         'instanceId': nativeInstanceId,
         'bufferTier': _bufferTier,
         'tunnelingEnabled': _tunnelingEnabled,
+        'screenCaptureCompatibility': SettingsService.instance.read(SettingsService.screenCaptureCompatibility),
         'dvConversionMode': _dvConversionMode,
         'audioPassthroughEnabled': _audioPassthroughEnabled,
         // Cheap (32-bit) TV boxes run the hardware video path a frame behind a GL

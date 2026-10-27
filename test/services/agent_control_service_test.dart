@@ -148,6 +148,16 @@ void main() {
     expect(reported, rebuilding);
   });
 
+  testWidgets('capture compatibility requires ExoPlayer and applies on next playback', (tester) async {
+    final harness = await _Harness.mount(tester);
+    final listed = await harness.command('settings.list', const {});
+    final descriptors = ((listed['result'] as Map)['settings'] as List).cast<Map>();
+    final capture = descriptors.singleWhere((setting) => setting['key'] == 'screen_capture_compatibility');
+    final exoSetting = descriptors.singleWhere((setting) => setting['key'] == 'tunneled_playback');
+    expect(capture['application'], 'nextPlayback');
+    expect(capture['applicability'], exoSetting['applicability']);
+  });
+
   test('malformed JSON produces a structured failure without reflecting input', () async {
     const sensitiveInput = '{"secret":"never-repeat-this"';
     final result = await AgentControlService.instance.executePayload(sensitiveInput);

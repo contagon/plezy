@@ -737,6 +737,7 @@ class SettingsService extends BaseSharedPreferencesService {
   static const matchContentFrameRate = BoolPref('match_content_frame_rate');
   static const matchContentResolution = BoolPref('match_content_resolution');
   static const tunneledPlayback = BoolPref('tunneled_playback', defaultValue: false);
+  static const screenCaptureCompatibility = BoolPref('screen_capture_compatibility');
   static const dvConversionMode = EnumPref<DvConversionModePreference>(
     'dv_conversion_mode',
     values: DvConversionModePreference.values,
@@ -1503,6 +1504,7 @@ class SettingsService extends BaseSharedPreferencesService {
     matchContentFrameRate,
     matchContentResolution,
     tunneledPlayback,
+    screenCaptureCompatibility,
     dvConversionMode,
     disableDolbyVision,
     hdrSdrConversion,

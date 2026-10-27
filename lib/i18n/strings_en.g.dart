@@ -1243,6 +1243,12 @@ class Translations$settings$en {
 	/// en: 'Lower the mix to prevent clipping. Turn off to keep the original volume (may distort loud scenes).'
 	String get audioDownmixNormalizeDescription => 'Lower the mix to prevent clipping. Turn off to keep the original volume (may distort loud scenes).';
 
+	/// en: 'Ambilight / Screen Capture Compatibility'
+	String get screenCaptureCompatibility => 'Ambilight / Screen Capture Compatibility';
+
+	/// en: 'Use ExoPlayer texture rendering for screen grabbers such as Hyperion. Not supported by mpv. Disables tunneled playback and may affect HDR, resolution, and performance. Applies to the next player session.'
+	String get screenCaptureCompatibilityDescription => 'Use ExoPlayer texture rendering for screen grabbers such as Hyperion. Not supported by mpv. Disables tunneled playback and may affect HDR, resolution, and performance. Applies to the next player session.';
+
 	/// en: 'Dolby Vision Conversion'
 	String get dvConversionMode => 'Dolby Vision Conversion';
 
@@ -8438,6 +8444,8 @@ extension on Translations {
 			'settings.downmixCenterBoostShort' => 'dB',
 			'settings.audioDownmixNormalize' => 'Normalize Volume on Downmix',
 			'settings.audioDownmixNormalizeDescription' => 'Lower the mix to prevent clipping. Turn off to keep the original volume (may distort loud scenes).',
+			'settings.screenCaptureCompatibility' => 'Ambilight / Screen Capture Compatibility',
+			'settings.screenCaptureCompatibilityDescription' => 'Use ExoPlayer texture rendering for screen grabbers such as Hyperion. Not supported by mpv. Disables tunneled playback and may affect HDR, resolution, and performance. Applies to the next player session.',
 			'settings.dvConversionMode' => 'Dolby Vision Conversion',
 			'settings.dvConversionModeDescription' => 'Choose how Dolby Vision Profile 7 files are handled.',
 			'settings.dvConversionAuto' => 'Auto',
@@ -8538,10 +8546,10 @@ extension on Translations {
 			'themeEditor.preview' => 'Preview',
 			'themeEditor.slots.bg' => 'Background',
 			'themeEditor.slots.surface' => 'Surface',
-			'themeEditor.slots.outline' => 'Outline',
-			'themeEditor.slots.text' => 'Text',
 			_ => null,
 		} ?? switch (path) {
+			'themeEditor.slots.outline' => 'Outline',
+			'themeEditor.slots.text' => 'Text',
 			'themeEditor.slots.textMuted' => 'Secondary text',
 			'themeEditor.slots.accent' => 'Accent',
 			'themeEditor.opacity' => 'Opacity',
@@ -9052,10 +9060,10 @@ extension on Translations {
 			'profiles.pinProtectionOptional' => 'PIN protection (optional)',
 			'profiles.pinExplain' => '4-digit PIN required to switch profiles.',
 			'profiles.continueButton' => 'Continue',
-			'profiles.pinsDontMatch' => 'PINs don\'t match',
-			'profiles.tokenIdentityMismatch' => 'The Plex profile token resolved to an unexpected server',
 			_ => null,
 		} ?? switch (path) {
+			'profiles.pinsDontMatch' => 'PINs don\'t match',
+			'profiles.tokenIdentityMismatch' => 'The Plex profile token resolved to an unexpected server',
 			'connections.sectionTitle' => 'Connections',
 			'connections.addConnection' => 'Add connection',
 			'connections.addConnectionSubtitleNoProfile' => 'Sign in with Plex or connect a Jellyfin or Emby server',
@@ -9566,10 +9574,10 @@ extension on Translations {
 			'liveTv.recordSettings.anyChannel' => 'Record on any channel',
 			'liveTv.recordSettings.anyTime' => 'Record at any time',
 			'liveTv.recordSettings.skipInLibrary' => 'Skip episodes already in the library',
-			'liveTv.recordSettings.keepUpTo' => 'Episodes to keep',
-			'liveTv.recordSettings.keepUpToHint' => '0 keeps every episode',
 			_ => null,
 		} ?? switch (path) {
+			'liveTv.recordSettings.keepUpTo' => 'Episodes to keep',
+			'liveTv.recordSettings.keepUpToHint' => '0 keeps every episode',
 			'liveTv.startingInMinutes' => ({required Object minutes}) => 'Starting in ${minutes} min',
 			'liveTv.dayAtTime' => ({required Object day, required Object time}) => '${day} at ${time}',
 			'liveTv.invalidPlaybackData' => ({required Object product}) => '${product} returned invalid Live TV playback data',
@@ -10080,10 +10088,10 @@ extension on Translations {
 			'performanceOverlay.decoderQualcommHw' => 'Qualcomm HW',
 			'performanceOverlay.decoderMediatekHw' => 'MediaTek HW',
 			'performanceOverlay.decoderExynosHw' => 'Exynos HW',
-			'performanceOverlay.decoderSoftware' => 'Software',
-			'performanceOverlay.decoderHardware' => 'Hardware',
 			_ => null,
 		} ?? switch (path) {
+			'performanceOverlay.decoderSoftware' => 'Software',
+			'performanceOverlay.decoderHardware' => 'Hardware',
 			'performanceOverlay.tunnelingActive' => 'Active',
 			'performanceOverlay.dvRpuFailed' => ({required Object converted, required Object failures}) => '${converted} (${failures} failed)',
 			'externalPlayer.title' => 'External Player',

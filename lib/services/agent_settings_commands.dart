@@ -242,7 +242,10 @@ class AgentSettingsCommands {
         if (!(Platform.isAndroid && !exo) && !PlatformDetector.isAppleTV()) {
           return 'Disabling Dolby Vision requires the Android mpv backend or Apple TV.';
         }
-      case 'tunneled_playback' || 'playback_buffer_tier' || 'subtitle_anchor_to_screen':
+      case 'tunneled_playback' ||
+          'playback_buffer_tier' ||
+          'subtitle_anchor_to_screen' ||
+          'screen_capture_compatibility':
         if (!exo) return 'This setting requires the existing Android ExoPlayer backend.';
       case 'custom_shaders' || 'global_shader_preset':
         if (exo || !ShaderService.isPlatformSupported) {
@@ -334,6 +337,7 @@ class AgentSettingsCommands {
     'match_content_frame_rate',
     'match_content_resolution',
     'tunneled_playback',
+    'screen_capture_compatibility',
     'dv_conversion_mode',
     'disable_dolby_vision',
     'hdr_sdr_conversion',

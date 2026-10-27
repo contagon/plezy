@@ -303,6 +303,7 @@ class ExoPlayerPlugin :
     }
 
     val tunnelingEnabled = call.argument<Boolean>("tunnelingEnabled") ?: false
+    val screenCaptureCompatibility = call.argument<Boolean>("screenCaptureCompatibility") ?: false
     dvConversionMode = call.argument<String>("dvConversionMode") ?: "auto"
     val audioPassthroughEnabled = call.argument<Boolean>("audioPassthroughEnabled") ?: false
     val assVideoLatencyFrames = call.argument<Int>("assVideoLatencyFrames") ?: 0
@@ -351,6 +352,7 @@ class ExoPlayerPlugin :
         coreInstanceId = call.argument<Number>("instanceId")?.toLong()
         val success = core.initialize(
           tunnelingEnabled = tunnelingEnabled,
+          screenCaptureCompatibility = screenCaptureCompatibility,
           audioPassthroughEnabled = audioPassthroughEnabled,
           bufferTier = bufferTier
         )

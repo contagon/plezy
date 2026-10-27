@@ -184,6 +184,8 @@ class ExoPlayerCore(private val activity: Activity) :
   }
 
   private var surfaceView: SurfaceView? = null
+  private var videoTextureView: android.view.TextureView? = null
+  private var screenCaptureCompatibility = false
   private var surfaceContainer: FrameLayout? = null
   private var videoAspectContainer: AspectRatioFrameLayout? = null
   private var subtitleView: SubtitleView? = null
@@ -576,6 +578,7 @@ class ExoPlayerCore(private val activity: Activity) :
 
   fun initialize(
     tunnelingEnabled: Boolean = true,
+    screenCaptureCompatibility: Boolean = false,
     audioPassthroughEnabled: Boolean = false,
     // Read-ahead depth, as the wire name Dart sends. Kept a String because `LoadControlPolicy`
     // is internal and this function is not; unrecognised names resolve to Auto, which is also
@@ -588,6 +591,7 @@ class ExoPlayerCore(private val activity: Activity) :
     }
 
     tunnelingUserEnabled = tunnelingEnabled
+    this.screenCaptureCompatibility = screenCaptureCompatibility
     this.audioPassthroughEnabled = audioPassthroughEnabled
     this.dvMode = getConfiguredDvMode()
     displayHdrSupported = DoviBridge.displaySupportsHdr(activity)
@@ -630,9 +634,12 @@ class ExoPlayerCore(private val activity: Activity) :
       }
 
       // Create SurfaceView for video rendering (fills the ARFL).
-      surfaceView = PlayerSurfaceHost.createVideoSurface(activity, surfaceCallback)
-
-      videoAspectContainer!!.addView(surfaceView)
+      val videoView = if (screenCaptureCompatibility) {
+        android.view.TextureView(activity).also { videoTextureView = it }
+      } else {
+        PlayerSurfaceHost.createVideoSurface(activity, surfaceCallback).also { surfaceView = it }
+      }
+      videoAspectContainer!!.addView(videoView, FrameLayout.LayoutParams(-1, -1))
       surfaceContainer!!.addView(videoAspectContainer)
 
       // Separate bitmap subtitles from text subtitles. Media3 scales PGS/VOB
@@ -853,10 +860,10 @@ class ExoPlayerCore(private val activity: Activity) :
       // Inserted before the Media3 subtitle views so both punches run before
       // PGS/VOB/SRT/VTT cues draw on the parent canvas.
       surfaceContainer?.let { container ->
-        val assView = AssSubtitleSurfaceView(container.context, handler)
+        val assView = AssSubtitleSurfaceView(container.context, handler, useTextureView = screenCaptureCompatibility)
         assSubtitleView = assView
         // Pre-36 sublayer is already set by the view's own setZOrderMediaOverlay(true).
-        FlutterOverlayHelper.applyCompositionOrder(assView, -1)
+        assView.surfaceView?.let { FlutterOverlayHelper.applyCompositionOrder(it, -1) }
         val bitmapIndex = container.indexOfChild(bitmapSubtitleView)
         val textIndex = container.indexOfChild(subtitleView)
         val subtitleIndex = when {
@@ -892,7 +899,7 @@ class ExoPlayerCore(private val activity: Activity) :
         // as a content-time shift (not a present delay, which would freeze the
         // single-slot latest-wins pipeline by superseding every frame).
         val assView = assSubtitleView
-        val latencyFrames = assVideoLatencyFrames
+        val latencyFrames = if (screenCaptureCompatibility) 0 else assVideoLatencyFrames
         val fps = detectedFrameRate.takeIf { it > 1f } ?: currentVideoFormat?.frameRate?.takeIf { it > 1f } ?: 0f
         val videoLatencyUs = if (latencyFrames != 0 && fps > 1f) {
           (latencyFrames * 1_000_000.0 / fps).toLong()
@@ -904,7 +911,7 @@ class ExoPlayerCore(private val activity: Activity) :
           val calibrator = latencyCalibrator ?: surfaceView?.let { sv ->
             AssLatencyCalibrator(
               videoSurface = sv,
-              overlaySurface = assView,
+              overlaySurface = assView.surfaceView!!,
               onCalibrated = { frames -> onAssLatencyCalibrated(frames) },
               onDone = { assSubtitleView?.setPreSwapProbe(null) },
               log = { msg -> emitLog("info", "ass-latency-cal", msg) }
@@ -964,6 +971,7 @@ class ExoPlayerCore(private val activity: Activity) :
         }
       }
       surfaceView?.let { exoPlayer!!.setVideoSurfaceView(it) }
+      videoTextureView?.let { exoPlayer!!.setVideoTextureView(it) }
 
       // Debug: Log SubtitleView child hierarchy
       subtitleView?.post {
@@ -2692,6 +2700,7 @@ class ExoPlayerCore(private val activity: Activity) :
     val player = exoPlayer ?: return null
     val audioDelayActive = (renderersFactory?.audioDelayUs?.get() ?: 0L) != 0L
     return tunnelingUserEnabled &&
+      !screenCaptureCompatibility &&
       !DeviceQuirks.hasUnreliableTunneledPlayback(contentFrameRate) &&
       (player.playbackParameters.speed == 1f) &&
       !tunnelingDisabledForCodec &&
@@ -4303,6 +4312,7 @@ class ExoPlayerCore(private val activity: Activity) :
   }
 
   private fun getTunnelingStatus(player: ExoPlayer): String {
+    if (screenCaptureCompatibility) return "Off (screen capture compatibility)"
     if (currentTunneledPlayback) return "Active"
     if (!tunnelingUserEnabled) return "Disabled by user"
     if (DeviceQuirks.hasUnreliableTunneledPlayback(contentFrameRate)) return "Off (unreliable on this device)"
@@ -4416,6 +4426,7 @@ class ExoPlayerCore(private val activity: Activity) :
     surfaceContainer = null
     videoAspectContainer = null
     surfaceView = null
+    videoTextureView = null
     subtitleView = null
     bitmapSubtitleView = null
     assSubtitleView = null
