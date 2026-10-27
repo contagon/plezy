@@ -13,6 +13,6 @@ setup:
 test *args:
     scripts/run_tests.sh "$@"
 
-# Build a debug-signed APK for sideloading (build/app/outputs/flutter-apk/app-debug.apk).
-apk:
-    flutter build apk --debug
+# Build a profile APK by default; modes: profile, debug, release (requires signing).
+apk mode="profile":
+    flutter build apk --"$1"
