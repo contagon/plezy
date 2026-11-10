@@ -764,6 +764,27 @@ void main() {
       expect(h.provider.roomCopy?.ref, opened.adapter.copy);
     });
 
+    _roomTest(
+      'a code whose room ended is refused, and joining it with create makes the room again with the open file',
+      (world) async {
+        final h = world.host();
+        await world.settle(h.provider.createRoom());
+        h.provider.endRoom();
+        await world.until(() => !h.provider.isInSession, 'the room is over');
+        final g = world.guest();
+        expect(await world.refusal(g.provider.joinRoom('k7m-q2x')), owp.ErrorCode.roomNotFound);
+
+        final opened = _openPlayer(_copyOf(_hostAlien));
+        h.provider.playerOpened(opened.adapter, shareable: true, roomLaunch: false);
+        await world.settle(h.provider.joinRoom('k7m-q2x', create: true));
+
+        expect((h.provider.roomCode, h.provider.isHost), (FakeOwpRelay.code, true));
+        expect(world.relay.sent('join').last['create'], isTrue);
+        await world.until(() => h.provider.isFollowing, 'the room plays the host file');
+        expect(h.provider.media?.title, 'Alien');
+      },
+    );
+
     _roomTest('a failed search is reported and searched again; without a player the file is offered', (world) async {
       final h = world.host();
       final g = world.guest();
@@ -794,6 +815,44 @@ void main() {
       await world.until(() => g.provider.isFollowing, 'the guest follows');
       expect(screen.players.single.adapter.copy, _copyOf(_guestAlien));
       expect(g.provider.canJoinPlayback, isFalse);
+    });
+
+    _roomTest('a guest that switches to another version of its file keeps following, and the room seeks it', (
+      world,
+    ) async {
+      final (host: h, guest: g, hostPlayer: _, :screen) = await world.following();
+      final remux = _openPlayer(
+        _copyOf(_alien('g-alien', 'guest-nas', durationMs: _alienMs + 800, version: 'g-remux')),
+      );
+
+      g.provider.playerOpened(remux.adapter, shareable: true, roomLaunch: false);
+      await world.until(() => g.provider.isFollowing, 'the guest follows the other version');
+      expect(g.provider.roomCopy?.ref, remux.adapter.copy);
+      expect(g.provider.canJoinPlayback, isFalse);
+      expect(screen.players, hasLength(1), reason: 'the switched file is the guest pick, so nothing reopens');
+
+      expect(h.provider.seek(const Duration(minutes: 20)), isTrue);
+      await world.until(
+        () => remux.player.commandLog.any(
+          (command) => command.startsWith('seek:') && int.parse(command.substring(5)) >= 1200000,
+        ),
+        'the room seeks the other version',
+      );
+    });
+
+    _roomTest('a version the room cannot take sits out instead of holding the room', (world) async {
+      final (host: h, guest: g, hostPlayer: _, screen: _) = await world.following();
+      // No length anywhere and no server to read it from: the party refuses it.
+      final unknown = _openPlayer(_copyOf(_alien('g-alien', 'guest-nas', durationMs: null, version: 'g-remux')));
+
+      g.provider.playerOpened(unknown.adapter, shareable: true, roomLaunch: false);
+      await world.noticed<ChoiceFailedNotice>(g, 'the guest is told');
+      expect(g.provider.isFollowing, isFalse);
+      expect(g.provider.roomCopy?.ref, _copyOf(_guestAlien), reason: 'the room keeps the guest earlier pick');
+      await world.until(
+        () => h.participant(g.peerId).player == owp.PlayerState.idle,
+        'the room stops waiting for the guest',
+      );
     });
   });
 
